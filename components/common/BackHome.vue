@@ -43,7 +43,7 @@ export default {
         href = '/'
       else if (this.type === 'gameCenter')
         href = '/game/'
-      window.location.href = href
+      this.$router.push(href)
     }
   }
 }

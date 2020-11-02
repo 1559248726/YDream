@@ -18,12 +18,9 @@
             width="80px"
             @click.stop="btnClick(item.title)"
           >
-            <nuxt-link
-              v-if="device"
-              :to="'/game/' + item.title"
-            >
+            <span v-if="device">
               进入
-            </nuxt-link>
+            </span>
             <span
               v-else
               class="copy-button"
@@ -91,7 +88,7 @@ export default {
   methods: {
     btnClick(title) {
       if (this.device)
-        window.location.href = this.url + '/' + title
+        this.$router.push('/game/' + title)
       else {
         document.getElementsByClassName('copy-button')[0].click()
       }
