@@ -1,5 +1,8 @@
 <template>
-  <v-row justify="center" align="center">
+  <v-row
+    justify="center"
+    align="center"
+  >
     <v-col cols="12" sm="8" md="6">
       <v-card>
         <v-card-title class="headline text-center">余齐松（Dexter Yu）的个人网站</v-card-title>
@@ -13,7 +16,6 @@
 
 <script>
 export default {
-  components: {}
 }
 </script>
 

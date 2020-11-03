@@ -41,9 +41,7 @@ export default {
     meta: [
       { hid: 'description', name: 'description', content: '前端团队智勇大闯关' },
       { name: 'keywords', content: '前端游戏' },
-      { 'http-equiv': 'Content-Type', content: 'text/html; charset=utf-8' }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   }
 }
 </script>

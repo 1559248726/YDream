@@ -1,9 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <v-container>
-        <nuxt/>
-      </v-container>
+      <nuxt/>
     </v-main>
     <v-footer :absolute="!fixed" app>
       <span>Copyright &copy; {{ new Date().getFullYear() }} ydream.xyz</span>

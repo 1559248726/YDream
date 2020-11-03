@@ -24,7 +24,16 @@ export default {
   },
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
-  css: ['~/assets/scss/common'],
+  css: [
+    '~/assets/style/common',
+    '~/assets/style/transition',
+  ],
+
+  // The pageTransition Property
+  pageTransition: {
+    // name: 'my-page',
+    // mode: 'out-in',
+  },
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [],
@@ -56,15 +65,15 @@ export default {
   pwa: {
     // icon: false, // disables the icon module
     manifest: {
-      name: 'My Awesome App',
-      lang: 'en',
+      name: 'Dexter Yu',
+      lang: 'zh-CN',
       useWebmanifestExtension: false
     }
   },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
   vuetify: {
-    customVariables: ['~/assets/scss/variables.scss'],
+    customVariables: ['~/assets/style/variables.scss'],
     theme: {
       light: true,
       themes: {
