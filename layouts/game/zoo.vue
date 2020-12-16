@@ -12,7 +12,7 @@
       <p>请使用电脑访问：{{url}}</p>
       <p>希望你玩的开心啊～</p>
       <p>内啥，理性游戏，注意情绪...</p>
-      <nuxt-link to="./">返回游戏合集</nuxt-link>
+      <nuxt-link to="/game">返回游戏合集</nuxt-link>
     </div>
   </v-app>
 </template>
@@ -34,10 +34,10 @@ export default {
   },
   mounted() {
     const userAgent = navigator.userAgent
-    this.device = userAgent.includes('Mac') || userAgent.includes('Windows');
+    this.device = !userAgent.includes('iPhone') && !userAgent.includes('Android')
   },
   head: {
-    titleTemplate: '%s • Dexter Yu 的游戏',
+    titleTemplate: '%s • Y Dream 的游戏',
     meta: [
       { hid: 'description', name: 'description', content: '前端团队智勇大闯关' },
       { name: 'keywords', content: '前端游戏' },

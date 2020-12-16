@@ -16,13 +16,17 @@
           <v-btn
             elevation="0"
             width="80px"
-            @click.stop="btnClick(item.title)"
+            :disabled=!!item.status
+            @click.stop="btnClick(item.title, item.type)"
           >
-            <span v-if="device">
+            <span v-if="type = 0">
+              进入
+            </span>
+            <span v-if="type = 1 && device">
               进入
             </span>
             <span
-              v-else
+              v-if="type = 1 && !device"
               class="copy-button"
               @click="copyWebsite(item.title)"
             >
@@ -64,8 +68,16 @@ export default {
     return {
       items: [
         {
-          title: 'zoo',
-          content: '前端闯关类游戏，致敬当年淘宝UED前端团队智勇大闯关校招游戏'
+          title: 'Zoo',
+          content: '前端闯关类游戏，致敬当年淘宝UED前端团队智勇大闯关校招游戏',
+          type: 1,
+          status: 0
+        },
+        {
+          title: 'Puzzle',
+          content: '拼图游戏，还在制作中...',
+          type: 0,
+          status: 1
         }
       ],
       device: '',
@@ -83,11 +95,11 @@ export default {
   },
   mounted() {
     const userAgent = navigator.userAgent
-    this.device = userAgent.includes('Mac') || userAgent.includes('Windows')
+    this.device = !userAgent.includes('iPhone') && !userAgent.includes('Android')
   },
   methods: {
-    btnClick(title) {
-      if (this.device)
+    btnClick(title, type) {
+      if (type === 0 || type === 1 && this.device)
         this.$router.push('/game/' + title)
       else {
         document.getElementsByClassName('copy-button')[0].click()
@@ -104,7 +116,7 @@ export default {
     }
   },
   head: {
-    titleTemplate: '%s • Dexter Yu 的游戏',
+    titleTemplate: '%s • Y Dream 的游戏',
     title: '游戏合集'
   }
 }

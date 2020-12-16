@@ -37,7 +37,7 @@ export default {
     console.log('开始游戏：Navigated to ' + url + '/gate')
   },
   head: {
-    title: 'zoo 游戏简介'
+    title: 'Zoo 游戏简介'
   }
 }
 </script>

@@ -7,8 +7,8 @@ export default {
 
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    titleTemplate: '%s • Dexter Yu 的个人网站',
-    title: '余齐松',
+    titleTemplate: '%s • Y Dream 的网站',
+    title: 'Y Dream',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -65,7 +65,7 @@ export default {
   pwa: {
     // icon: false, // disables the icon module
     manifest: {
-      name: 'Dexter Yu',
+      name: 'Y Dream',
       lang: 'zh-CN',
       useWebmanifestExtension: false
     }

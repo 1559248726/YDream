@@ -287,17 +287,21 @@
             <div v-if="error.statusCode === 404">
               <h1>404</h1>
               <h2>{{ pageNotFound }}</h2>
-              <p>您所寻找的页面不存在。你可以点击下面的按钮，返回主页。</p>
+              <p>您所寻找的页面不存在。你可以点击下面的按钮返回。</p>
             </div>
             <div v-else>
               <h1>ERROR</h1>
               <h2>{{ otherError }}</h2>
-              <p>出现一个未知错误。你可以点击下面的按钮，返回主页。</p>
+              <p>出现一个未知错误。你可以点击下面的按钮返回。</p>
             </div>
             <v-btn
               elevation="0"
-              @click="back"
+              @click="back('back')"
             >返回</v-btn>
+            <v-btn
+              elevation="0"
+              @click="back('home')"
+            >返回首页</v-btn>
           </div>
         </div>
       </v-container>
@@ -323,9 +327,12 @@ export default {
   mounted() {
   },
   methods: {
-    back() {
-      // window.history.back()
-      location.reload();
+    back(type) {
+      if (type === 'home')
+        this.$router.push('/')
+      else if (type === 'back')
+        window.history.back()
+      // location.reload();
     }
   },
   head() {

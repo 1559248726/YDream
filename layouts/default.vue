@@ -21,8 +21,8 @@ export default {
   },
   head: {
     meta: [
-      { hid: 'description', name: 'description', content: '余齐松(Dexter Yu)的个人网站' },
-      { name: 'keywords', content: '余齐松、个人网站、Dexter Yu' },
+      { hid: 'description', name: 'description', content: 'YDream的首页' },
+      { name: 'keywords', content: 'YDream' },
     ]
   }
 }
