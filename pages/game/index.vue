@@ -19,14 +19,14 @@
             :disabled=!!item.status
             @click.stop="btnClick(item.title, item.type)"
           >
-            <span v-if="type = 0">
+            <span v-if="item.type = 0">
               进入
             </span>
-            <span v-if="type = 1 && device">
+            <span v-else-if="item.type = 1 && device">
               进入
             </span>
             <span
-              v-if="type = 1 && !device"
+              v-else-if="item.type = 1 && !device"
               class="copy-button"
               @click="copyWebsite(item.title)"
             >
