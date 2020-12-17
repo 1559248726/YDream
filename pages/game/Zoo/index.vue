@@ -5,7 +5,7 @@
       <p>听说过关主要靠人品，无情转发可以加 Buff～</p>
       <p>这是一个前端闯关游戏，请找到游戏<a color="primary">入口</a>，然后开始游戏</p>
       <img
-        src="/img/zoo/game-zoo-0.jpg"
+        src="~/assets/img/zoo/game-zoo-0.jpg"
         alt="看好你"
       />
       <p style="color: white">致敬淘宝UED前端团队</p>

@@ -17,7 +17,7 @@
           <div class="main">
             <div class="menu">
               <div class="img-wrapper">
-                <img src="/img/puzzle/game-puzzle-1.jpg" alt="">
+                <img src="~/assets/img/puzzle/game-puzzle-1.jpg" alt="">
               </div>
               <div class="btn-group">
                 <v-btn
@@ -34,10 +34,10 @@
                 <img
                   v-for="(img, i) in imgs"
                   :key="i"
-                  :src="'/img/puzzle/game-puzzle-1_' + img + '.png'"
+                  :src="require(`~/assets/img/puzzle/game-puzzle-1_${img}.png`)"
                   alt=""
-                  :style="{cursor: img===null?'not-allowed':'pointer'}"
-                  @click="img===null?'':imgChoose($event,i)"
+                  :style="{cursor: img!==null && flag?'pointer':'not-allowed'}"
+                  @click="img!==null && flag?imgChoose($event,i):''"
                 >
               </div>
             </div>
@@ -70,8 +70,13 @@ export default {
       row: 4,
       column: 3,
       blankImg: null,
-      imgs: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+      imgs: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+      setTime: 0
     }
+  },
+  mounted() {
+    const userAgent = navigator.userAgent
+    !userAgent.includes('iPhone') && !userAgent.includes('Android')?this.setTime=0:this.setTime=100
   },
   methods: {
     imgChoose(e, i) {
@@ -120,36 +125,39 @@ export default {
           setTimeout(() => {
             e.target.style.transition = "none"
             this.$set(this.imgs, change, this.imgs[i])
-            const temp = i
-            this.$set(this.imgs, i, null)
-            this.blankImg = temp
-            e.target.style.transform = "translateX(0)"
+            this.blankImg = i
             setTimeout(() => {
-              e.target.style.transition = "all 200ms"
-            }, 20)
-            e.target.style.zIndex = 1
-            this.flag = true
-            let flag = 0
-            for (let i = 0; i < this.imgs.length; i++) {
-              if (this.imgs[i] !== i) flag++
-            }
-            if (flag === 1) {
-              this.blankImg = null
+              this.$set(this.imgs, i, null)
+              e.target.style.transform = "translateX(0)"
+              e.target.style.zIndex = -10
+              this.flag = true
+              let flag = 0
               for (let i = 0; i < this.imgs.length; i++) {
-                this.$set(this.imgs, i, i)
+                if (this.imgs[i] !== i) flag++
               }
-              alert("恭喜完成游戏！")
-            }
-          }, 180)
+              if (flag === 1) {
+                this.blankImg = null
+                for (let i = 0; i < this.imgs.length; i++) {
+                  this.$set(this.imgs, i, i)
+                }
+                alert("恭喜完成游戏！")
+              }
+              setTimeout(() => {
+                e.target.style.transition = "all 200ms"
+                e.target.style.zIndex = 1
+              }, 20)
+            }, this.setTime)
+          }, 200)
         }
       }
     }
   },
   head: {
     titleTemplate: "%s • Y Dream 的游戏",
+    title: "Puzzle",
     meta: [
-      { hid: "description", name: "description", content: "前端团队智勇大闯关" },
-      { name: "keywords", content: "前端游戏" }
+      { hid: "description", name: "description", content: "Puzzle" },
+      { name: "keywords", content: "拼图游戏" }
     ]
   }
 };
@@ -217,9 +225,6 @@ export default {
 
     .puzzle-wrapper {
       flex-grow: 1;
-      @media (max-width: $media-xs) {
-
-      }
 
       #puzzle {
         display: flex;
@@ -227,7 +232,7 @@ export default {
         margin: 0 auto;
         width: 480px;
         height: 640px;
-        background-image: url("/img/puzzle/game-puzzle-1_null.png");
+        background-image: url('~assets/img/puzzle/game-puzzle-1_null.png');
         background-size: 160px 160px;
         background-repeat: repeat;
         @media (max-width: $media-sm) {

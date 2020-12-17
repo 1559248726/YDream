@@ -4,7 +4,7 @@
     @click="clickTime++"
   >
     <img
-      src="/img/zoo/game-zoo-1_1.jpg"
+      src="~/assets/img/zoo/game-zoo-1_1.jpg"
       alt=""
       :style="{top: img1.top + '%', left: img1.left + '%'}"
       @mouseover="imgChange(1)"
@@ -13,7 +13,7 @@
     >
     <img
       v-if="clickTime >= 5"
-      src="/img/zoo/game-zoo-1_2.jpg"
+      src="~/assets/img/zoo/game-zoo-1_2.jpg"
       alt=""
       :style="{top: img2.top + '%', left: img2.left + '%'}"
       @mouseover="imgChange(2)"
