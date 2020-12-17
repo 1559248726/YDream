@@ -74,7 +74,7 @@ export default {
           title: 'Puzzle',
           content: '拼图游戏，还在制作中...',
           type: 0,
-          status: 1
+          status: 0
         }
       ],
       device: '',

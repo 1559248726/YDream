@@ -1,5 +1,5 @@
 <template>
-  <div style="position: fixed; top: 30px; left: 30px;">
+  <div style="position: fixed; top: 30px; left: 30px; z-index: 1000">
     <v-btn
       icon
       color="accent"
