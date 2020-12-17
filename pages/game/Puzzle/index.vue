@@ -26,7 +26,7 @@
             </div>
             <div class="puzzle-wrapper">
               <div id="puzzle">
-                游戏
+                <img src="" alt="">
               </div>
             </div>
           </div>
@@ -87,6 +87,7 @@ export default {
     .menu {
       display: flex;
       flex-direction: column;
+      width: 300px;
 
       .v-btn {
         margin: 10px auto;
@@ -97,9 +98,10 @@ export default {
       flex-grow: 1;
 
       #puzzle {
+        display: flex;
         margin: 0 auto;
-        width: 500px;
-        height: 600px;
+        width: 480px;
+        height: 640px;
         background-color: #7f7f7f;
       }
     }
