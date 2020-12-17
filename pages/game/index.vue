@@ -12,7 +12,10 @@
           {{item.title}}
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <p>{{item.content}}</p>
+          <div>
+            {{item.content}}
+            <p style="font-size: 12px">{{item.type === 0?'':'（仅支持电脑端）'}}</p>
+          </div>
           <v-btn
             elevation="0"
             width="80px"
@@ -66,14 +69,14 @@ export default {
       items: [
         {
           title: 'Zoo',
-          content: '前端闯关类游戏，致敬当年淘宝UED前端团队智勇大闯关校招游戏',
+          content: '前端闯关类游戏，致敬淘宝UED前端团队的智勇大闯关校招游戏',
           type: 1,
           status: 0
         },
         {
           title: 'Puzzle',
           content: '拼图游戏，还在制作中...',
-          type: 0,
+          type: 1,
           status: 0
         }
       ],

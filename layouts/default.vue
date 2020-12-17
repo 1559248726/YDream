@@ -52,15 +52,15 @@ export default {
   div {
     display: flex;
     &.footer-wrapper {
-      flex-direction: column;
-      @media (min-width: $media-md) {
-        flex-direction: row;
+      flex-direction: row;
+      @media (max-width: $media-md) {
+        flex-direction: column;
       }
     }
     &.footer-head {
-      flex-direction: column;
-      @media (min-width: $media-xs) {
-        flex-direction: row;
+      flex-direction: row;
+      @media (max-width: $media-xs) {
+        flex-direction: column;
       }
     }
 
