@@ -13,7 +13,7 @@
         <div class="wrapper">
           <div class="head">
             <h2>拼图游戏</h2>
-            <span class="puzzle-timer">{{ !(time.hour / 10 > 1) ? "0" + time.hour + ":" : time.hour + ":"
+            <span ref="timer" class="puzzle-timer">{{ !(time.hour / 10 > 1) ? "0" + time.hour + ":" : time.hour + ":"
               }}{{ !(time.minute / 10 > 1) ? "0" + time.minute + ":" : time.minute + ":"
               }}{{ !(time.second / 10 > 1) ? "0" + time.second + "." : time.second + "."
               }}{{ 1 > time.millisecond / 100 ? "0" : "" }}{{ 1 > time.millisecond / 10 ? "0" : ""
@@ -280,7 +280,7 @@ export default {
     },
     puzzleEnd() {
       this.end();
-      alert('恭喜完成游戏！时间为'+this.time.hour+':'+this.time.minute+':'+this.time.second+'.'+this.time.millisecond+'。');
+      alert('恭喜完成游戏！时间为'+this.$refs.timer.textContent+'。');
     },
     puzzleTimer() {
       this.time.millisecond += 50;
