@@ -1,5 +1,5 @@
 <template>
-  <div class="horizontal-vertical-center">
+  <div class="center">
     <v-expansion-panels
       class="text-center"
       style="width: 300px"
@@ -60,7 +60,7 @@
 import BackHome from '../../components/common/BackHome'
 
 export default {
-  layout: 'empty',
+  layout: 'default',
   components: {
     BackHome
   },

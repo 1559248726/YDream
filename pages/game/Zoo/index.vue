@@ -1,5 +1,5 @@
 <template>
-  <div class="horizontal-vertical-center">
+  <div class="center">
     <div class="text-center">
       <p>欢迎来到 zoo 游戏入口～</p>
       <p>听说过关主要靠人品，无情转发可以加 Buff～</p>
