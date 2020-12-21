@@ -27,44 +27,46 @@
 
 <script>
 export default {
-  name: 'BackHome',
+  name: "BackHome",
   props: {
     type: {
       type: String,
       default() {
-        return 'home'
+        return "home";
       }
     }
   },
   methods: {
     backHome() {
       let href;
-      if (this.type === 'home')
-        href = '/'
-      else if (this.type === 'gameCenter')
-        href = '/game/'
-      this.$router.push(href)
+      if (this.type === "home")
+        href = "/";
+      else if (this.type === "gameCenter")
+        href = "/game/";
+      this.$router.push(href);
     }
   }
-}
+};
 </script>
 
 <style scoped lang="scss">
-  .v-btn:hover + .back-text {
-    opacity: 1;
-    top: 36px;
-  }
 
-  .back-text {
-    z-index: -10;
-    opacity: 0;
-    transition: all 400ms;
-    text-align: center;
-    position: absolute;
-    font-size: 12px;
-    width: 48px;
-    top: 24px;
-    left: -6px;
-    right: -6px;
-  }
+.v-btn:hover + .back-text {
+  opacity: 1;
+  top: 36px;
+}
+
+.back-text {
+  color: $ultimate-gray;
+  z-index: -10;
+  opacity: 0;
+  transition: all 400ms;
+  text-align: center;
+  position: absolute;
+  font-size: 12px;
+  width: 48px;
+  top: 24px;
+  left: -6px;
+  right: -6px;
+}
 </style>

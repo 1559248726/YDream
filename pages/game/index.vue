@@ -43,7 +43,7 @@
       {{snackbarMessage}}
       <template v-slot:action="{ attrs }">
         <v-btn
-          color="error"
+          color="blue"
           text
           v-bind="attrs"
           @click="snackbar = false"
