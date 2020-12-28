@@ -39,6 +39,8 @@
     <v-snackbar
       v-model="snackbar"
       timeout="2000"
+      centered
+      vertical
     >
       {{snackbarMessage}}
       <template v-slot:action="{ attrs }">
@@ -68,13 +70,13 @@ export default {
     return {
       items: [
         {
-          title: 'Zoo',
+          title: 'zoo',
           content: '前端闯关类游戏，致敬淘宝UED前端团队的智勇大闯关校招游戏',
           type: 1,
           status: 0
         },
         {
-          title: 'Puzzle',
+          title: 'puzzle',
           content: '拼图游戏，还在制作中...',
           type: 0,
           status: 0

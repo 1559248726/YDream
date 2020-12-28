@@ -1,5 +1,5 @@
 {
-  "name": "dexteryu",
+  "name": "ydream-web",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -22,7 +22,8 @@
     "@nuxtjs/pwa": "^3.0.2",
     "core-js": "^3.6.5",
     "nuxt": "^2.14.6",
-    "nuxt-clipboard2": "^0.2.1"
+    "nuxt-clipboard2": "^0.2.1",
+    "vee-validate": "^3.4.5"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^3.1.0",

@@ -36,7 +36,10 @@ export default {
   },
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: [],
+  plugins: [
+    // 表单验证
+    '@/plugins/vee-validate'
+  ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -54,22 +57,40 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
-    '@nuxtjs/pwa',
+    // '@nuxtjs/pwa',
     // 剪贴板
     'nuxt-clipboard2'
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
-  axios: {},
+  axios: {
+    proxy: true,
+  },
 
-  pwa: {
-    // icon: false, // disables the icon module
-    manifest: {
-      name: 'Y Dream',
-      lang: 'zh-CN',
-      useWebmanifestExtension: false
+  proxy: {
+    '/api': {
+      target: 'http://127.0.0.1:4040', // 目标接口域名
+      // changeOrigin: true, // 表示是否跨域
+      // pathRewrite: {
+      //   '^/api': '/', // 把 /api 替换成 /
+      // }
     }
   },
+
+  // publicRuntimeConfig: {
+  //   axios: {
+  //     baseURL: 'http://127.0.0.1:8080/api'
+  //   }
+  // },
+
+  // pwa: {
+  //   // icon: false, // disables the icon module
+  //   manifest: {
+  //     name: 'Y Dream',
+  //     lang: 'zh-CN',
+  //     useWebmanifestExtension: false
+  //   }
+  // },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
   vuetify: {
@@ -92,6 +113,10 @@ export default {
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
+    extractCSS: {
+      allChunks: true
+    },
+    vendor: ['axios']
     // analyze: true,
     // assetFilter(assetFilename) {
     //   return assetFilename.endsWith('.js');
