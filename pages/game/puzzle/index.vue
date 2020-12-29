@@ -42,10 +42,10 @@
         <div class="wrapper">
           <div class="head">
             <h2>拼图游戏</h2>
-            <span ref="timer" class="puzzle-timer">{{ 1 > time.hour / 10 ? "0" + time.hour + ":" : time.hour + ":"
-              }}{{ 1 > time.minute / 10 ? "0" + time.minute + ":" : time.minute + ":"
-              }}{{ 1 > time.second / 10 ? "0" + time.second + "." : time.second + "."
-              }}{{ 1 > time.millisecond / 100 ? "0" : "" }}{{ 1 > time.millisecond / 10 ? "0" : ""
+            <span ref="timer" class="puzzle-timer">{{10 > time.hour ? "0" + time.hour + ":" : time.hour + ":"
+              }}{{ 10 > time.minute ? "0" + time.minute + ":" : time.minute + ":"
+              }}{{ 10 > time.second ? "0" + time.second + "." : time.second + "."
+              }}{{ 100 > time.millisecond ? "0" : "" }}{{ 10 > time.millisecond ? "0" : ""
               }}{{ time.millisecond }}</span>
             <div class="head-right">
               <div class="user">
@@ -303,11 +303,16 @@ export default {
     const record = [];
     if (recordJson.message === "success") {
       for (let i = 0; i < recordJson.records.length; i++) {
-        let time = recordJson.records[i].time;
+        let time = String(recordJson.records[i].time);
         let hour = 0;
         let minute = 0;
-        const millisecond = time % 1 * 1000;
-        time -= millisecond / 1000;
+        let millisecond = time.split('.')[1]?parseInt(time.split('.')[1]):0;
+        if (millisecond < 10) {
+          millisecond *= 100;
+        } else if (millisecond < 100) {
+          millisecond *= 10;
+        }
+        time = parseInt(time.split('.')[0]);
         while (time >= 60 * 60) {
           hour++;
           time -= 60 * 60;
@@ -321,11 +326,11 @@ export default {
           time -= 60;
         }
         const r = { id: i };
-        r.name = `${hour / 10 < 1 ? "0" + hour : hour
-        }:${minute / 10 < 1 ? "0" + minute : minute
-        }:${time / 10 < 1 ? "0" + time : time
-        }.${millisecond / 100 < 1 ? "0" : ""
-        }${millisecond / 10 < 1 ? "0" : ""
+        r.name = `${hour < 10 ? "0" + hour : hour
+        }:${minute < 10 ? "0" + minute : minute
+        }:${time < 10 ? "0" + time : time
+        }.${millisecond < 100 ? "0" : ""
+        }${millisecond < 10 ? "0" : ""
         }${millisecond}`;
 
         record.push(r)

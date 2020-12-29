@@ -12,10 +12,6 @@
     "test": "jest"
   },
   "config": {
-    "nuxt": {
-      "host": "127.0.0.1",
-      "port": "8080"
-    }
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.12.2",
