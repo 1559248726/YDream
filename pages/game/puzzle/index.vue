@@ -14,11 +14,10 @@
           排行榜
         </v-card-title>
         <v-row>
-
-          <!--          <v-treeview-->
-          <!--            hoverable-->
-          <!--            :items="items"-->
-          <!--          ></v-treeview>-->
+          <v-treeview
+            hoverable
+            :items="record"
+          ></v-treeview>
           <!--          <v-treeview-->
           <!--            :active.sync="active"-->
           <!--            :items="items"-->
@@ -251,6 +250,37 @@
                 >
               </div>
             </div>
+            <v-dialog
+              v-model="dialog2"
+              persistent
+              max-width="290"
+            >
+              <v-card>
+                <v-card-title class="headline">
+                  {{ user !== null ? "恭喜完成游戏！" : "是否登录？" }}
+                </v-card-title>
+                <v-card-text>{{ user !== null ? "您的" : "恭喜完成游戏！" }}用时为：{{ dialog2Text }}</v-card-text>
+                <v-card-text v-if="user !== null">点击上传即可上传记录。</v-card-text>
+                <v-card-text v-else>登录之后可以保存完成游戏的用时记录，并且可以参与网站排行榜。</v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    color="green darken-1"
+                    text
+                    @click="loginCancel"
+                  >
+                    {{ user !== null ? "关闭" : "取消" }}
+                  </v-btn>
+                  <v-btn
+                    color="green darken-1"
+                    text
+                    @click="loginConfirm"
+                  >
+                    {{ user !== null ? "上传" : "登录" }}
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
           </div>
         </div>
       </v-container>
@@ -273,7 +303,32 @@ export default {
     const record = [];
     if (recordJson.message === "success") {
       for (let i = 0; i < recordJson.records.length; i++) {
-        record[i] = recordJson.records[i].time;
+        let time = recordJson.records[i].time;
+        let hour = 0;
+        let minute = 0;
+        const millisecond = time % 1 * 1000;
+        time -= millisecond / 1000;
+        while (time >= 60 * 60) {
+          hour++;
+          time -= 60 * 60;
+        }
+        while (time >= 60) {
+          minute++;
+          time -= 60;
+        }
+        while (time >= 60) {
+          minute++;
+          time -= 60;
+        }
+        const r = { id: i };
+        r.name = `${hour / 10 < 1 ? "0" + hour : hour
+        }:${minute / 10 < 1 ? "0" + minute : minute
+        }:${time / 10 < 1 ? "0" + time : time
+        }.${millisecond / 100 < 1 ? "0" : ""
+        }${millisecond / 10 < 1 ? "0" : ""
+        }${millisecond}`;
+
+        record.push(r)
       }
     }
     const userJson = await $axios.$get("/api/puzzle/user");
@@ -310,6 +365,8 @@ export default {
       timerInt: 0,
       drawer: null,
       dialog: false,
+      dialog2: false,
+      dialog2Text: null,
       username: "",
       password: "",
       isRegister: false,
@@ -349,6 +406,7 @@ export default {
       this.snackbarText = "游戏已取消！";
     },
     imgChoose(e, i) {
+      this.snackbar = false;
       if (this.isStart) {
         if (this.blankImg === null) {
           this.puzzleStart(e, i);
@@ -472,7 +530,8 @@ export default {
     },
     puzzleEnd() {
       this.end();
-      alert("恭喜完成游戏！时间为" + this.$refs.timer.textContent + "。");
+      this.dialog2Text = this.$refs.timer.textContent;
+      this.dialog2 = true;
     },
     puzzleTimer() {
       this.time.millisecond += 50;
@@ -489,6 +548,27 @@ export default {
         this.time.hour += 1;
       }
       if (this.time.hour >= 24) window.clearInterval(this.timerInt);
+    },
+    async recordSubmit() {
+      const timeArray = this.dialog2Text.split(":");
+      let time = parseFloat(timeArray[2]);
+      if (timeArray[0] !== "00") time += parseInt(timeArray[0]) * 60 * 60;
+      if (timeArray[1] !== "00") time += parseInt(timeArray[1]) * 60;
+      await this.$axios.$post("/api/puzzle/record", { time });
+      this.dialog2Text = null;
+      this.snackbar = true;
+      this.snackbarText = "记录已成功上传！";
+    },
+    loginCancel() {
+      this.dialog2Text = null;
+      this.dialog2 = false;
+    },
+    loginConfirm() {
+      this.dialog2 = false;
+      if (this.user !== null)
+        this.recordSubmit();
+      else
+        this.dialog = true;
     },
     async userInfo() {
       const userJson = await this.$axios.$get("/api/puzzle/user");
@@ -513,10 +593,15 @@ export default {
       });
       if (json.message === "success") {
         this.snackbar = true;
-        this.snackbarText = "登陆成功！";
-        await this.userInfo()
+        if (this.confirmPassword === "") {
+          this.snackbarText = "登陆成功！";
+        } else {
+          this.snackbarText = "注册并登录成功！";
+        }
+        await this.userInfo();
+        if (this.dialog2Text !== "") await this.recordSubmit();
         this.userClear();
-      } else {
+      } else if (this.confirmPassword === "") {
         this.snackbar = true;
         this.snackbarText = "用户名或者密码错误。";
       }
@@ -528,22 +613,14 @@ export default {
         password: this.password,
         confirmPassword: this.confirmPassword
       });
+      this.snackbar = true;
       if (json.message === "success") {
-        this.snackbar = true;
         this.snackbarText = "注册成功！";
-        const json2 = await this.$axios.$post("/api/puzzle/login", {
-          username: this.username,
-          password: this.password
-        });
-        if (json2.message === "success") {
-          this.snackbar = true;
-          this.snackbarText = "注册并登录成功！";
-          await this.userInfo()
-          this.userClear();
-        }
+        await this.userLogin();
+      } else if (json.message === "username duplicate") {
+        this.snackbarText = "用户名重复，请修改用户名。";
       } else {
-        this.snackbar = true;
-        this.snackbarText = "用户名或者密码错误。";
+        this.snackbarText = "注册失败！";
       }
     },
     userClear() {
@@ -551,7 +628,7 @@ export default {
       this.username = "";
       this.password = "";
       this.confirmPassword = "";
-      this.$refs.observer.reset();
+      this.isRegister = false;
     },
     async userLogout() {
       const Json = await this.$axios.$post("/api/puzzle/logout");
