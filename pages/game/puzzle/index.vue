@@ -57,7 +57,7 @@
               <v-list-item-title v-text="item.time"></v-list-item-title>
             </v-list-item-content>
 
-            <v-list-item-avatar>
+            <v-list-item-avatar width="100">
               <span v-text="item.username"></span>
             </v-list-item-avatar>
           </v-list-item>
