@@ -10,31 +10,58 @@
       disable-resize-watcher
     >
       <v-card>
-        <v-card-title class="indigo white--text headline">
-          排行榜
-        </v-card-title>
-        <v-row>
-          <v-treeview
-            hoverable
-            :items="record"
-          ></v-treeview>
-          <!--          <v-treeview-->
-          <!--            :active.sync="active"-->
-          <!--            :items="items"-->
-          <!--            :load-children="fetchUsers"-->
-          <!--            :open.sync="open"-->
-          <!--            activatable-->
-          <!--            color="warning"-->
-          <!--            open-on-click-->
-          <!--            transition-->
-          <!--          >-->
-          <!--            <template v-slot:prepend="{ item }">-->
-          <!--              <v-icon v-if="!item.children">-->
-          <!--                mdi-account-->
-          <!--              </v-icon>-->
-          <!--            </template>-->
-          <!--          </v-treeview>-->
-        </v-row>
+        <v-toolbar
+          color="light-blue"
+          dark
+        >
+          <v-app-bar-nav-icon></v-app-bar-nav-icon>
+
+          <v-toolbar-title>排行榜</v-toolbar-title>
+
+          <v-spacer></v-spacer>
+
+          <v-btn icon @click="rankRefresh">
+            <v-icon>mdi-refresh</v-icon>
+          </v-btn>
+
+          <v-btn icon @click="drawer = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-toolbar>
+        <v-list>
+          <v-subheader inset>站内最强记录（创建者）</v-subheader>
+          <v-divider inset></v-divider>
+          <v-list-item
+            v-for="(item, i) in record"
+            :key="i"
+          >
+            <v-list-item-icon>
+              <v-avatar
+                color="primary"
+                size="30"
+              ><span class="white--text">{{ i === 0 ? "一" : ""
+                }}{{ i === 1 ? "二" : ""
+                }}{{ i === 2 ? "三" : ""
+                }}{{ i === 3 ? "四" : ""
+                }}{{ i === 4 ? "五" : ""
+                }}{{ i === 5 ? "六" : ""
+                }}{{ i === 6 ? "七" : ""
+                }}{{ i === 7 ? "八" : ""
+                }}{{ i === 8 ? "九" : ""
+                }}{{ i === 9 ? "十" : ""
+                }}</span>
+              </v-avatar>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-list-item-title v-text="item.time"></v-list-item-title>
+            </v-list-item-content>
+
+            <v-list-item-avatar>
+              <span v-text="item.username"></span>
+            </v-list-item-avatar>
+          </v-list-item>
+        </v-list>
       </v-card>
     </v-navigation-drawer>
     <v-main>
@@ -42,7 +69,7 @@
         <div class="wrapper">
           <div class="head">
             <h2>拼图游戏</h2>
-            <span ref="timer" class="puzzle-timer">{{10 > time.hour ? "0" + time.hour + ":" : time.hour + ":"
+            <span ref="timer" class="puzzle-timer">{{ 10 > time.hour ? "0" + time.hour + ":" : time.hour + ":"
               }}{{ 10 > time.minute ? "0" + time.minute + ":" : time.minute + ":"
               }}{{ 10 > time.second ? "0" + time.second + "." : time.second + "."
               }}{{ 100 > time.millisecond ? "0" : "" }}{{ 10 > time.millisecond ? "0" : ""
@@ -306,13 +333,13 @@ export default {
         let time = String(recordJson.records[i].time);
         let hour = 0;
         let minute = 0;
-        let millisecond = time.split('.')[1]?parseInt(time.split('.')[1]):0;
+        let millisecond = time.split(".")[1] ? parseInt(time.split(".")[1]) : 0;
         if (millisecond < 10) {
           millisecond *= 100;
         } else if (millisecond < 100) {
           millisecond *= 10;
         }
-        time = parseInt(time.split('.')[0]);
+        time = parseInt(time.split(".")[0]);
         while (time >= 60 * 60) {
           hour++;
           time -= 60 * 60;
@@ -325,15 +352,15 @@ export default {
           minute++;
           time -= 60;
         }
-        const r = { id: i };
-        r.name = `${hour < 10 ? "0" + hour : hour
+        const r = { username: recordJson.records[i].owner ? recordJson.records[i].owner.username : "" };
+        r.time = `${hour < 10 ? "0" + hour : hour
         }:${minute < 10 ? "0" + minute : minute
         }:${time < 10 ? "0" + time : time
         }.${millisecond < 100 ? "0" : ""
         }${millisecond < 10 ? "0" : ""
         }${millisecond}`;
 
-        record.push(r)
+        record.push(r);
       }
     }
     const userJson = await $axios.$get("/api/puzzle/user");
@@ -641,6 +668,46 @@ export default {
         this.user = null;
         this.snackbar = true;
         this.snackbarText = "已退出账号";
+      }
+    },
+    async rankRefresh() {
+      const recordJson = await this.$axios.$get("/api/puzzle/record");
+      const record = [];
+      if (recordJson.message === "success") {
+        for (let i = 0; i < recordJson.records.length; i++) {
+          let time = String(recordJson.records[i].time);
+          let hour = 0;
+          let minute = 0;
+          let millisecond = time.split(".")[1] ? parseInt(time.split(".")[1]) : 0;
+          if (millisecond < 10) {
+            millisecond *= 100;
+          } else if (millisecond < 100) {
+            millisecond *= 10;
+          }
+          time = parseInt(time.split(".")[0]);
+          while (time >= 60 * 60) {
+            hour++;
+            time -= 60 * 60;
+          }
+          while (time >= 60) {
+            minute++;
+            time -= 60;
+          }
+          while (time >= 60) {
+            minute++;
+            time -= 60;
+          }
+          const r = { username: recordJson.records[i].owner ? recordJson.records[i].owner.username : "" };
+          r.time = `${hour < 10 ? "0" + hour : hour
+          }:${minute < 10 ? "0" + minute : minute
+          }:${time < 10 ? "0" + time : time
+          }.${millisecond < 100 ? "0" : ""
+          }${millisecond < 10 ? "0" : ""
+          }${millisecond}`;
+
+          record.push(r);
+        }
+        this.record = record;
       }
     }
   },
