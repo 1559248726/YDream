@@ -57,7 +57,7 @@
               <v-list-item-title v-text="item.time"></v-list-item-title>
             </v-list-item-content>
 
-            <v-list-item-avatar width="100">
+            <v-list-item-avatar width="100" style="justify-content: center;">
               <span v-text="item.username"></span>
             </v-list-item-avatar>
           </v-list-item>
@@ -624,6 +624,7 @@ export default {
         password: this.password
       });
       if (json.message === "success") {
+        this.userClear();
         this.snackbar = true;
         if (this.confirmPassword === "") {
           this.snackbarText = "登陆成功！";
@@ -632,7 +633,6 @@ export default {
         }
         await this.userInfo();
         if (this.dialog2Text !== "") await this.recordSubmit();
-        this.userClear();
       } else if (this.confirmPassword === "") {
         this.snackbar = true;
         this.snackbarText = "用户名或者密码错误。";
