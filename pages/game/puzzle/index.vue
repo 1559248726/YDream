@@ -467,7 +467,7 @@ export default {
     },
     puzzleUpset(img) {
       let blankImg = this.blankImg;
-      let sum = 600;
+      let sum = 2000;
       while (sum--) {
         let up, down, left, right;
         if ((blankImg + 1) % this.column === 1) right = true;
