@@ -35,8 +35,8 @@
               <template v-slot:activator="{ on, attrs }">
                 <span
                   v-bind="attrs"
-                  v-on="on"
                   style="margin-left: 20px"
+                  v-on="on"
                 >{{ ranking ? "站 内 排 行 榜" : "个 人 排 行 榜" }}</span>
               </template>
               <span>{{ user ? "" : "登录后，" }}点击左侧图标即可切换排行榜</span>
@@ -299,6 +299,40 @@
                   @click="cancel"
                 >取消游戏
                 </v-btn>
+                <v-dialog
+                  v-model="dialogHelp"
+                  width="500"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      depressed
+                      elevation="3"
+                      outlined
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="dialogHelp=true"
+                    >游戏帮助
+                    </v-btn>
+                  </template>
+                  <v-card>
+                    <v-card-title class="headline">游戏帮助</v-card-title>
+                    <v-card-text>
+                      <p style="text-indent: 28px">点击开始游戏并选择点击一块拼图，即可开始游戏！游戏会去除选中的拼图，并打乱其他拼图位置，您需要通过一个空白位置还原其他所有拼图。</p>
+                      <p style="text-indent: 28px; margin-bottom: 0">登录账号后，即可选择是否上传完成游戏的用时，上传用时后即可参与排行榜的排名。排行榜分两种模式，即个人排行榜与站内排行榜，可随时进行切换。</p>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn
+                        color="primary"
+                        text
+                        @click="dialogHelp = false"
+                      >
+                        确认
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+
               </div>
             </div>
             <div class="puzzle-wrapper">
@@ -435,6 +469,7 @@ export default {
       dialog: false,
       dialog2: false,
       dialog2Text: "",
+      dialogHelp: false,
       username: "",
       password: "",
       isRegister: false,

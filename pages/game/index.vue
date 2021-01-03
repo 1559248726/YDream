@@ -77,7 +77,7 @@ export default {
         },
         {
           title: 'puzzle',
-          content: '拼图游戏，还在制作中...',
+          content: '拼图游戏，具有保存用户游戏记录、个人排行榜和站内排行榜等功能',
           type: 0,
           status: 0
         }
