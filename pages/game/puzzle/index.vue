@@ -29,7 +29,19 @@
             <span>{{ user ? "" : "登录后，" }}点击即可切换排行榜</span>
           </v-tooltip>
 
-          <v-toolbar-title>{{ ranking ? "站内排行榜" : "个人排行榜" }}</v-toolbar-title>
+
+          <v-toolbar-title>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <span
+                  v-bind="attrs"
+                  v-on="on"
+                  style="margin-left: 20px"
+                >{{ ranking ? "站 内 排 行 榜" : "个 人 排 行 榜" }}</span>
+              </template>
+              <span>{{ user ? "" : "登录后，" }}点击左侧图标即可切换排行榜</span>
+            </v-tooltip>
+          </v-toolbar-title>
 
           <v-spacer></v-spacer>
 
