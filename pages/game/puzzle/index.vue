@@ -748,7 +748,6 @@ export default {
         this.snackbarText = "已退出账号";
         if (!this.ranking) {
           this.ranking = true;
-          await this.rankRefresh();
         }
       }
     },
