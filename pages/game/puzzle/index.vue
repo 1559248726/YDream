@@ -14,22 +14,46 @@
           color="light-blue"
           dark
         >
-          <v-app-bar-nav-icon></v-app-bar-nav-icon>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                icon
+                v-bind="attrs"
+                v-on="on"
+                @click="user?ranking=!ranking: ''"
+              >
+                <v-icon v-if="!user || ranking">mdi-web</v-icon>
+                <v-icon v-else>mdi-account</v-icon>
+              </v-btn>
+            </template>
+            <span>{{ user ? "" : "登录后，" }}点击即可切换排行榜</span>
+          </v-tooltip>
 
-          <v-toolbar-title>排行榜</v-toolbar-title>
+          <v-toolbar-title>{{ ranking ? "站内排行榜" : "个人排行榜" }}</v-toolbar-title>
 
           <v-spacer></v-spacer>
 
-          <v-btn icon @click="rankRefresh">
-            <v-icon>mdi-refresh</v-icon>
-          </v-btn>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                icon
+                v-bind="attrs"
+                v-on="on"
+                @click="rankRefresh"
+              >
+                <v-icon>mdi-refresh</v-icon>
+              </v-btn>
+            </template>
+            <span>点击即可刷新排行榜</span>
+          </v-tooltip>
 
           <v-btn icon @click="drawer = false">
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-toolbar>
         <v-list>
-          <v-subheader inset>站内最强记录（创建者）</v-subheader>
+          <v-subheader v-if="!user || ranking" inset>站内的前十名最快记录（纪录保持者）</v-subheader>
+          <v-subheader v-else inset>{{ user.username }}，您最快的前十个记录</v-subheader>
           <v-divider inset></v-divider>
           <v-list-item
             v-for="(item, i) in record"
@@ -58,7 +82,7 @@
             </v-list-item-content>
 
             <v-list-item-avatar width="100" style="justify-content: center;">
-              <span v-text="item.username"></span>
+              <span v-if="!user || ranking" v-text="item.username"></span>
             </v-list-item-avatar>
           </v-list-item>
         </v-list>
@@ -398,14 +422,21 @@ export default {
       drawer: null,
       dialog: false,
       dialog2: false,
-      dialog2Text: null,
+      dialog2Text: "",
       username: "",
       password: "",
       isRegister: false,
-      confirmPassword: ""
+      confirmPassword: "",
+      ranking: true,
+      rankingIsShow: false
     };
   },
   computed: {},
+  watch: {
+    ranking() {
+      this.rankRefresh();
+    }
+  },
   mounted() {
     const userAgent = navigator.userAgent;
     !userAgent.includes("iPhone") && !userAgent.includes("Android") ? this.setTime = 0 : this.setTime = 100;
@@ -587,12 +618,12 @@ export default {
       if (timeArray[0] !== "00") time += parseInt(timeArray[0]) * 60 * 60;
       if (timeArray[1] !== "00") time += parseInt(timeArray[1]) * 60;
       await this.$axios.$post("/api/puzzle/record", { time });
-      this.dialog2Text = null;
+      this.dialog2Text = "";
       this.snackbar = true;
       this.snackbarText = "记录已成功上传！";
     },
     loginCancel() {
-      this.dialog2Text = null;
+      this.dialog2Text = "";
       this.dialog2 = false;
     },
     loginConfirm() {
@@ -668,10 +699,17 @@ export default {
         this.user = null;
         this.snackbar = true;
         this.snackbarText = "已退出账号";
+        if (!this.ranking) {
+          this.ranking = true;
+          await this.rankRefresh();
+        }
       }
     },
     async rankRefresh() {
-      const recordJson = await this.$axios.$get("/api/puzzle/record");
+      let data = "";
+      if (!this.ranking) data = "isUser=true";
+      if (data) data = "?" + data;
+      const recordJson = await this.$axios.$get("/api/puzzle/record" + data);
       const record = [];
       if (recordJson.message === "success") {
         for (let i = 0; i < recordJson.records.length; i++) {
