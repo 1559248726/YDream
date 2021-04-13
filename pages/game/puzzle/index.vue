@@ -318,7 +318,8 @@
                     <v-card-title class="headline">游戏帮助</v-card-title>
                     <v-card-text>
                       <p style="text-indent: 28px">点击开始游戏并选择点击一块拼图，即可开始游戏！游戏会去除选中的拼图，并打乱其他拼图位置，您需要通过一个空白位置还原其他所有拼图。</p>
-                      <p style="text-indent: 28px; margin-bottom: 0">登录账号后，即可选择是否上传完成游戏的用时，上传用时后即可参与排行榜的排名。排行榜分两种模式，即个人排行榜与站内排行榜，可随时进行切换。</p>
+                      <p style="text-indent: 28px; margin-bottom: 0">
+                        登录账号后，即可选择是否上传完成游戏的用时，上传用时后即可参与排行榜的排名。排行榜分两种模式，即个人排行榜与站内排行榜，可随时进行切换。</p>
                     </v-card-text>
                     <v-card-actions>
                       <v-spacer></v-spacer>
