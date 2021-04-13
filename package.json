@@ -10,7 +10,7 @@
     "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "lint": "yarn lint:js",
     "test": "jest",
-    "pm2": "nuxt build && pm2 start yarn --name ydream -- start"
+    "pm2": "pm2 start yarn --name ydream -- start"
   },
   "config": {
     "nuxt": {
