@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import { ValidationProvider, localize, extend, setInteractionMode } from "vee-validate";
 import { max, required, confirmed } from "vee-validate/dist/rules";
-import zhCN from 'vee-validate/dist/locale/zh_CN'; // 引入本地化语言
+import zhCN from 'vee-validate/dist/locale/zh_CN.json'; // 引入本地化语言
 
 extend("required", required);
 extend("max", max);
