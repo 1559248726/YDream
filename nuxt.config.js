@@ -1,4 +1,5 @@
 import colors from "vuetify/es5/util/colors";
+import config from './config/config'
 
 export default {
   // Disable server-side rendering (https://go.nuxtjs.dev/ssr-mode)
@@ -62,24 +63,25 @@ export default {
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
-    proxy: true
+    // proxy: true
+    baseURL: config.proxy
+  },
+
+  publicRuntimeConfig: {
+    axios: {
+      baseURL: config.proxy
+    }
   },
 
   proxy: {
     "/api": {
-      target: "http://127.0.0.1:4041" // 目标接口域名
+      target: "http://127.0.0.1:4040" // 目标接口域名
       // changeOrigin: true, // 表示是否跨域
       // pathRewrite: {
       //   '^/api': '/', // 把 /api 替换成 /
       // }
     }
   },
-
-  // publicRuntimeConfig: {
-  //   axios: {
-  //     baseURL: 'http://127.0.0.1:8080/api'
-  //   }
-  // },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
   vuetify: {
