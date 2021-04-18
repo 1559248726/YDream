@@ -75,7 +75,7 @@ export default {
 
   proxy: {
     "/api": {
-      target: "http://127.0.0.1:4040" // 目标接口域名
+      target: config.proxy
       // changeOrigin: true, // 表示是否跨域
       // pathRewrite: {
       //   '^/api': '/', // 把 /api 替换成 /
