@@ -8,7 +8,7 @@ export default {
 
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    titleTemplate: "%s • Y Dream 的网站",
+    titleTemplate: "%s • DexterYu 的网站",
     title: "羽梦",
     meta: [
       { charset: "utf-8" },
