@@ -37,7 +37,7 @@ export default {
     this.device = !userAgent.includes("iPhone") && !userAgent.includes("Android");
   },
   head: {
-    titleTemplate: "%s • Y Dream 的游戏",
+    titleTemplate: "%s • DexterYu 的游戏",
     meta: [
       { hid: "description", name: "description", content: "前端团队智勇大闯关" },
       { name: "keywords", content: "前端游戏" }

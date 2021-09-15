@@ -265,8 +265,25 @@
             </v-snackbar>
             <div class="menu">
               <div class="img-wrapper">
-                <div class="img">
-                  <img src="~/assets/img/puzzle/game-puzzle-1.jpg" alt="">
+                <div v-if="row === 3" class="img img1">
+                  <img
+                    class=""
+                    src="~/assets/img/puzzle/2/game-puzzle-2.jpg"
+                    alt=""
+                  >
+                  <div
+                    v-show="chooseImgWrapper.display"
+                    class="choose-img-wrapper"
+                    :style="{'left': 'calc(100% / '+column+'*'+chooseImgWrapper.x+')', 'top': 'calc(100% / '+row+'*'+chooseImgWrapper.y+')', 'width': 'calc(100% / '+column+')', 'height': 'calc(100% / '+row+')'}"
+                  >
+                  </div>
+                </div>
+                <div v-else class="img img2">
+                  <img
+                    class="img2"
+                    src="~/assets/img/puzzle/1/game-puzzle-1.jpg"
+                    alt=""
+                  >
                   <div
                     v-show="chooseImgWrapper.display"
                     class="choose-img-wrapper"
@@ -280,8 +297,9 @@
                   depressed
                   elevation="3"
                   outlined
-                  disabled
-                >选择难度
+                  :disabled="isStart"
+                  @click="row === 3 ? row = 4 : row = 3"
+                >切换难度
                 </v-btn>
                 <v-btn
                   v-if="!isStart"
@@ -296,6 +314,7 @@
                   depressed
                   elevation="3"
                   outlined
+                  :disabled="auto"
                   @click="cancel"
                 >取消游戏
                 </v-btn>
@@ -317,9 +336,18 @@
                   <v-card>
                     <v-card-title class="headline">游戏帮助</v-card-title>
                     <v-card-text>
-                      <p style="text-indent: 28px">点击开始游戏并选择点击一块拼图，即可开始游戏！游戏会去除选中的拼图，并打乱其他拼图位置，您需要通过一个空白位置还原其他所有拼图。</p>
+                      <p style="text-indent: 28px">
+                        点击开始游戏并选择点击一块拼图，即可开始游戏！游戏会去除选中的拼图，并打乱其他拼图位置，您需要通过一个空白位置还原其他所有拼图。
+                      </p>
                       <p style="text-indent: 28px; margin-bottom: 0">
-                        登录账号后，即可选择是否上传完成游戏的用时，上传用时后即可参与排行榜的排名。排行榜分两种模式，即个人排行榜与站内排行榜，可随时进行切换。</p>
+                        登录账号后，即可选择是否上传完成游戏的用时，上传用时后即可参与排行榜的排名。
+                      </p>
+                      <p style="text-indent: 28px">
+                        排行榜分两种模式，即个人排行榜与站内排行榜，可随时进行切换。
+                      </p>
+                      <p style="text-indent: 28px; margin-bottom: 0">
+                        3*3难度具有自动还原功能，3*4难度可上传游戏用时。
+                      </p>
                     </v-card-text>
                     <v-card-actions>
                       <v-spacer></v-spacer>
@@ -333,15 +361,34 @@
                     </v-card-actions>
                   </v-card>
                 </v-dialog>
-
+                <v-btn
+                  v-if="row === 3"
+                  depressed
+                  elevation="3"
+                  outlined
+                  :disabled="!blankImg || auto"
+                  @click="autoFinish"
+                >自动完成
+                </v-btn>
               </div>
             </div>
             <div class="puzzle-wrapper">
-              <div id="puzzle">
+              <div v-if="row === 3" class="puzzle img1">
                 <img
-                  v-for="(img, i) in imgs"
+                  v-for="(img, i) in imgs1"
+                  :id="'img' + i"
                   :key="i"
-                  :src="require(`~/assets/img/puzzle/game-puzzle-1_${img}.png`)"
+                  :src="require(`~/assets/img/puzzle/2/game-puzzle-2_${img}.png`)"
+                  alt=""
+                  :style="{cursor: img !== null && flag && !auto ? 'pointer' : 'not-allowed'}"
+                  @click="img !== null && flag ? imgChoose($event,i) : ''"
+                >
+              </div>
+              <div v-else class="puzzle img2">
+                <img
+                  v-for="(img, i) in imgs2"
+                  :key="i"
+                  :src="require(`~/assets/img/puzzle/1/game-puzzle-1_${img}.png`)"
                   alt=""
                   :style="{cursor: img!==null && flag?'pointer':'not-allowed'}"
                   @click="img!==null && flag?imgChoose($event,i):''"
@@ -354,12 +401,17 @@
               max-width="290"
             >
               <v-card>
-                <v-card-title class="headline">
+                <v-card-title v-if="row === 4" class="headline">
                   {{ user !== null ? "恭喜完成游戏！" : "是否登录？" }}
                 </v-card-title>
+                <v-card-title v-else class="headline">
+                  恭喜完成游戏！
+                </v-card-title>
                 <v-card-text>{{ user !== null ? "您的" : "恭喜完成游戏！" }}用时为：{{ dialog2Text }}</v-card-text>
-                <v-card-text v-if="user !== null">点击上传即可上传记录。</v-card-text>
-                <v-card-text v-else>登录之后可以保存完成游戏的用时记录，并且可以参与网站排行榜。</v-card-text>
+                <div v-if="row === 4">
+                  <v-card-text v-if="user !== null">点击上传即可上传记录。</v-card-text>
+                  <v-card-text v-else>登录之后可以保存完成游戏的用时记录，并且可以参与网站排行榜。</v-card-text>
+                </div>
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn
@@ -370,6 +422,7 @@
                     {{ user !== null ? "关闭" : "取消" }}
                   </v-btn>
                   <v-btn
+                    v-if="row === 4"
                     color="green darken-1"
                     text
                     @click="loginConfirm"
@@ -388,6 +441,7 @@
 
 <script>
 import { ValidationObserver } from "vee-validate";
+import PriorityQueue from "priorityqueuejs";
 import BackHome from "../../../components/common/BackHome";
 
 export default {
@@ -445,8 +499,9 @@ export default {
   },
   data() {
     return {
+      auto: false,
       flag: true,
-      row: 4,
+      row: 3,
       column: 3,
       isStart: false,
       snackbar: false,
@@ -457,7 +512,8 @@ export default {
         y: 0,
         display: false
       },
-      imgs: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+      imgs1: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+      imgs2: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
       setTime: 0,
       time: {
         hour: 0,
@@ -506,8 +562,14 @@ export default {
       this.chooseImgWrapper.y = 0;
       this.chooseImgWrapper.display = false;
       this.flag = true;
-      for (let i = 0; i < this.imgs.length; i++) {
-        this.$set(this.imgs, i, i);
+      if (this.row === 3) {
+        for (let i = 0; i < this.imgs1.length; i++) {
+          this.$set(this.imgs1, i, i + 1);
+        }
+      } else {
+        for (let i = 0; i < this.imgs2.length; i++) {
+          this.$set(this.imgs2, i, i);
+        }
       }
       this.isStart = false;
     },
@@ -530,23 +592,35 @@ export default {
       }
     },
     puzzleStart(e, i) {
-      const img = this.imgs;
+      let img
+      if (this.row === 3) {
+        img = this.imgs1;
+        this.$set(this.imgs1, i, null);
+      } else {
+        img = this.imgs2;
+        this.$set(this.imgs2, i, null);
+      }
       this.blankImg = i;
-      this.$set(this.imgs, i, null);
       this.chooseImgWrapper.x = i % this.column;
       this.chooseImgWrapper.y = Math.floor(i / this.column);
       this.chooseImgWrapper.display = true;
       img[this.blankImg] = null;
       const upset = this.puzzleUpset(img);
       this.blankImg = upset.blankImg;
-      for (let i = 0; i < img.length; i++) {
-        this.$set(this.imgs, i, upset.img[i]);
+      if (this.row === 3) {
+        for (let i = 0; i < img.length; i++) {
+          this.$set(this.imgs1, i, upset.img[i]);
+        }
+      } else {
+        for (let i = 0; i < img.length; i++) {
+          this.$set(this.imgs2, i, upset.img[i]);
+        }
       }
       this.timerInt = setInterval(this.puzzleTimer, 50);
     },
     puzzleUpset(img) {
       let blankImg = this.blankImg;
-      let sum = 2000;
+      let sum = 500;
       while (sum--) {
         let up, down, left, right;
         if ((blankImg + 1) % this.column === 1) right = true;
@@ -556,11 +630,12 @@ export default {
           left = true;
         }
         if (blankImg < this.column) down = true;
-        else if (blankImg > this.row * (this.column - 1)) up = true;
+        else if (blankImg > this.column * (this.row - 1) - 1) up = true;
         else {
           down = true;
           up = true;
         }
+
         const a = [];
         if (up) a.push("up");
         if (down) a.push("down");
@@ -619,16 +694,30 @@ export default {
         this.flag = false;
         setTimeout(() => {
           e.target.style.transition = "none";
-          this.$set(this.imgs, change, this.imgs[i]);
+          if (this.row === 3) {
+            this.$set(this.imgs1, change, this.imgs1[i]);
+          } else {
+            this.$set(this.imgs2, change, this.imgs2[i]);
+          }
           this.blankImg = i;
           setTimeout(() => {
-            this.$set(this.imgs, i, null);
+            if (this.row === 3) {
+              this.$set(this.imgs1, i, null);
+            } else {
+              this.$set(this.imgs2, i, null);
+            }
             e.target.style.transform = "translateX(0)";
             e.target.style.zIndex = -10;
             this.flag = true;
             let flag = 0;
-            for (let i = 0; i < this.imgs.length; i++) {
-              if (this.imgs[i] !== i) flag++;
+            if (this.row === 3) {
+              for (let i = 0; i < this.imgs1.length; i++) {
+                if (this.imgs1[i] !== i + 1) flag++;
+              }
+            } else {
+              for (let i = 0; i < this.imgs2.length; i++) {
+                if (this.imgs2[i] !== i) flag++;
+              }
             }
             if (flag === 1) this.puzzleEnd();
             setTimeout(() => {
@@ -641,8 +730,10 @@ export default {
     },
     puzzleEnd() {
       this.end();
-      this.dialog2Text = this.$refs.timer.textContent;
-      this.dialog2 = true;
+      if (this.auto !== true) {
+        this.dialog2Text = this.$refs.timer.textContent;
+        this.dialog2 = true;
+      }
     },
     puzzleTimer() {
       this.time.millisecond += 50;
@@ -794,6 +885,144 @@ export default {
         }
         this.record = record;
       }
+    },
+    autoToString(state) {
+      let string = ''
+      for (let i = 0; i < state.length; i++) {
+        string += state[i]
+      }
+      return string
+    },
+    autoFun(state) {
+      let ans = 0;
+      for (let i = 0; i < state.length; i++) {
+        if (state[i] !== 'x') {
+          const t = state[i] - 1
+          ans += Math.abs(Math.floor(i / 3) - Math.floor(t / 3)) + Math.abs(i % 3 - t % 3)
+        }
+      }
+      return ans
+    },
+    autoFinish() {
+      window.clearInterval(this.timerInt);
+      this.time.hour = 0;
+      this.time.minute = 0;
+      this.time.second = 0;
+      this.time.millisecond = 0;
+
+      this.auto = true
+
+      const start = []
+      for (let i = 0; i < this.imgs1.length; i++) {
+        start[i] = this.imgs1[i]
+      }
+      start[this.blankImg] = 'x'
+
+      let end = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+      end[this.chooseImgWrapper.y * 3 + this.chooseImgWrapper.x] = 'x'
+
+      const dis = new Map()
+      const pre = new Map()
+      const heap = new PriorityQueue((a, b) => {
+        return b.dis > a.dis ? 1 : b.dis < a.dis ? -1 : b.state > a.state ? 1 : b.state < a.state ? -1 : 0;
+      })
+
+      heap.enq({
+        dis: this.autoFun(start),
+        state: start
+      })
+      dis.set(this.autoToString(start), 0)
+
+      const op = [[-1, 0, 1, 0], [0, 1, 0, -1]]
+      const ope = ['u', 'r', 'd', 'l']
+      while (heap.size()) {
+
+        const t = heap.deq()
+        const state = t.state
+        if (state.toString() === end.toString())
+          break
+
+        const step = dis.get(this.autoToString(state))
+        let x, y
+        for(let i = 0; i < state.length; i++)
+          if(state[i] === 'x') {
+            x = Math.floor(i / 3);
+            y = i % 3;
+            break;
+          }
+
+        const source = []
+        for (let i = 0; i < state.length; i++) {
+          source[i] = state[i]
+        }
+
+        for (let i = 0; i < 4; i++)
+        {
+          const a = x + op[0][i]
+          const b = y + op[1][i]
+          let temp
+
+          if (a >= 0 && a < 3 && b >= 0 && b < 3) {
+            temp = state[x * 3 + y]
+            state[x * 3 + y] = state[a * 3 + b]
+            state[a * 3 + b] = temp
+
+            const string = this.autoToString(state)
+            if (!dis.has(string) || dis.get(string) > step + 1) {
+              dis.set(string, step + 1)
+              pre.set(string, {
+                source,
+                ope: ope[i]
+              })
+
+              const heapState = []
+              for (let i = 0; i < state.length; i++) {
+                heapState[i] = state[i]
+              }
+              heap.enq({
+                dis: dis.get(string) + this.autoFun(state),
+                state: heapState
+              })
+            }
+
+            temp = state[x * 3 + y]
+            state[x * 3 + y] = state[a * 3 + b]
+            state[a * 3 + b] = temp
+          }
+        }
+      }
+
+      let ans = ''
+      while (end.toString() !== start.toString()) {
+        ans += pre.get(this.autoToString(end)).ope
+        end = pre.get(this.autoToString(end)).source
+      }
+      const result = ans.split('').reverse().join('')
+
+      let i = 0
+      const interval = setInterval(() => {
+        if (i > result.length) {
+          this.auto = false
+          clearInterval(interval)
+        }
+
+        switch (result[i++]) {
+          case 'u':
+            document.getElementById("img" + (this.blankImg - 3)).click()
+            break
+          case 'r':
+            document.getElementById("img" + (this.blankImg + 1)).click()
+            break
+          case 'd':
+            document.getElementById("img" + (this.blankImg + 3)).click()
+            break
+          case 'l':
+            document.getElementById("img" + (this.blankImg - 1)).click()
+            break
+          default:
+            break
+        }
+      },400)
     }
   },
   head: {
@@ -863,6 +1092,7 @@ export default {
   .main {
     display: flex;
     flex-direction: row;
+    margin-top: 30px;
     @media (max-width: $media-xs) {
       flex-direction: column;
     }
@@ -874,27 +1104,43 @@ export default {
       @media (max-width: $media-xs) {
         width: auto;
         flex-direction: row;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
       }
 
       .img-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
         @media (max-width: $media-xs) {
           flex-grow: 1;
+          margin-bottom: 0;
         }
 
         .img {
-          width: 160px;
-          height: 220px;
           margin: 0 auto;
-          @media (max-width: $media-sm) {
-            width: 120px;
-            height: 160px;
-          }
           position: relative;
+
+          &.img1 {
+            width: 160px;
+            height: 160px;
+            @media (max-width: $media-sm) {
+              width: 140px;
+              height: 140px;
+            }
+          }
+
+          &.img2 {
+            width: 160px;
+            height: 220px;
+            @media (max-width: $media-sm) {
+              width: 120px;
+              height: 160px;
+            }
+          }
 
           img {
             width: 100%;
-            height: 100%;
           }
 
           .choose-img-wrapper {
@@ -908,7 +1154,7 @@ export default {
         display: flex;
         flex-direction: column;
         @media (max-width: $media-xs) {
-          flex-grow: 1;
+          flex-grow: 2;
         }
 
         .v-btn {
@@ -920,19 +1166,33 @@ export default {
     .puzzle-wrapper {
       flex-grow: 1;
 
-      #puzzle {
+      .puzzle {
         display: flex;
         flex-wrap: wrap;
         margin: 0 auto;
-        width: 480px;
-        height: 640px;
-        background-image: url('~assets/img/puzzle/game-puzzle-1_null.png');
+        background-image: url('~assets/img/puzzle/game-puzzle-null.png');
         background-size: 160px 160px;
         background-repeat: repeat;
         @media (max-width: $media-sm) {
-          width: 360px;
-          height: 480px;
           background-size: 120px 120px;
+        }
+
+        &.img1 {
+          width: 480px;
+          height: 480px;
+          @media (max-width: $media-sm) {
+            width: 360px;
+            height: 360px;
+          }
+        }
+
+        &.img2 {
+          width: 480px;
+          height: 640px;
+          @media (max-width: $media-sm) {
+            width: 360px;
+            height: 480px;
+          }
         }
 
         img {

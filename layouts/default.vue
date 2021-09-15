@@ -10,8 +10,8 @@
     >
       <div class="footer-wrapper">
         <div class="footer-head">
-          <span>Copyright &copy; {{ new Date().getFullYear() }}<a href="https://ydream.xyz/" target="_blank">
-            ydream.xyz
+          <span>Copyright &copy; {{ new Date().getFullYear() }}<a href="https://dexteryu.com/" target="_blank">
+            dexteryu.com
           </a></span>
           <span>Powered by DexterYu</span>
         </div>
@@ -32,8 +32,8 @@ export default {
   },
   head: {
     meta: [
-      { hid: "description", name: "description", content: "YDream的首页" },
-      { name: "keywords", content: "YDream" }
+      { hid: "description", name: "description", content: "DexterYu的首页" },
+      { name: "keywords", content: "DexterYu" }
     ]
   }
 };
