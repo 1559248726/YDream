@@ -64,12 +64,14 @@ export default {
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
     // proxy: true
-    baseURL: config.proxy
+    baseURL: config.proxy,
+    withCredentials: 'include'
   },
 
   publicRuntimeConfig: {
     axios: {
-      baseURL: config.proxy
+      baseURL: config.proxy,
+      withCredentials: 'include'
     }
   },
 
