@@ -21,20 +21,18 @@
 export default {
   data() {
     return {
-      device: ""
+      device: "",
+      url: ""
     };
-  },
-  computed: {
-    url() {
-      let url = location.href;
-      if (url.charAt(url.length - 1) === "/")
-        url = url.substring(0, url.length - 1);
-      return url;
-    }
   },
   mounted() {
     const userAgent = navigator.userAgent;
     this.device = !userAgent.includes("iPhone") && !userAgent.includes("Android");
+
+    let url = location.href;
+    if (url.charAt(url.length - 1) === "/")
+      url = url.substring(0, url.length - 1);
+    this.url = url;
   },
   head: {
     titleTemplate: "%s • DexterYu 的游戏",
