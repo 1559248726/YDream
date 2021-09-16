@@ -1026,7 +1026,7 @@ export default {
     }
   },
   head: {
-    titleTemplate: "%s • Y Dream 的游戏",
+    titleTemplate: "%s • DexterYu 的游戏",
     title: "Puzzle",
     meta: [
       { hid: "description", name: "description", content: "Puzzle" },

@@ -63,23 +63,28 @@ export default {
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
-    // proxy: true
-    baseURL: config.proxy
+    proxy: true,
+    prefix: '/api/',
+    credentials: true
+    // baseURL: config.proxy
   },
 
   publicRuntimeConfig: {
     axios: {
-      baseURL: config.proxy
+      proxy: true,
+      prefix: '/api/',
+      credentials: true
+      // baseURL: config.proxy
     }
   },
 
   proxy: {
     "/api": {
-      target: config.proxy
-      // changeOrigin: true, // 表示是否跨域
-      // pathRewrite: {
-      //   '^/api': '/', // 把 /api 替换成 /
-      // }
+      target: config.proxy,
+      changeOrigin: true, // 表示是否跨域
+      pathRewrite: {
+        '^/api': '/', // 把 /api 替换成 /
+      }
     }
   },
 
